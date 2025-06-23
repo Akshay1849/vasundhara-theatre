@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin - Bookings</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        body { background-color: #f9f9f9; padding: 20px; }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background: white;
+        }
+        th, td {
+            padding: 10px;
+            border: 1px solid #ddd;
+        }
+        th {
+            background-color: #333;
+            color: white;
+        }
+        h2 {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h2>🎟️ All Ticket Bookings</h2>
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Movie</th>
+            <th>Show Time</th>
+            <th>Category</th>
+            <th>Tickets</th>
+            <th>Total ₹</th>
+            <th>Booked At</th>
+        </tr>
+        {% for booking in bookings %}
+        <tr>
+            <td>{{ booking['id'] }}</td>
+            <td>{{ booking['movie_title'] }}</td>
+            <td>{{ booking['showtime'] }}</td>
+            <td>{{ booking['category'].title() }}</td>
+            <td>{{ booking['count'] }}</td>
+            <td>₹{{ booking['total_price'] }}</td>
+            <td>{{ booking['booking_time'] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>

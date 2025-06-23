@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>🎟️ Book Tickets | Vasundhara Theatre</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+            color: #fff;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            background: #ffffff15;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            display: flex;
+            gap: 40px;
+        }
+
+        .poster {
+            flex: 1;
+        }
+
+        .poster img {
+            width: 100%;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+        }
+
+        .booking-form {
+            flex: 2;
+        }
+
+        .booking-form h2 {
+            font-size: 28px;
+            margin-bottom: 20px;
+            color: #00ffd0;
+        }
+
+        label {
+            display: block;
+            margin-top: 20px;
+            font-weight: bold;
+            color: #f1f1f1;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: none;
+            margin-top: 8px;
+            font-size: 16px;
+        }
+
+        button {
+            margin-top: 30px;
+            width: 100%;
+            padding: 14px;
+            font-size: 18px;
+            font-weight: bold;
+            background: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: 0.3s ease;
+        }
+
+        button:hover {
+            background: #c0392b;
+        }
+
+        .movie-details {
+            margin-bottom: 15px;
+        }
+
+        .movie-details p {
+            margin: 5px 0;
+            color: #ccc;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- Poster Section -->
+        <div class="poster">
+            <img src="{{ url_for('static', filename='images/' + movie['poster']) }}" alt="{{ movie['title'] }} Poster">
+        </div>
+
+        <!-- Booking Form Section -->
+        <div class="booking-form">
+            <h2>Book Tickets for {{ movie['title'] }}</h2>
+
+            <div class="movie-details">
+                <p><strong>🎤 Cast:</strong> {{ movie['cast'] }}</p>
+                <p><strong>🗣️ Language:</strong> {{ movie['language'] }}</p>
+                <p><strong>⏱️ Duration:</strong> {{ movie['duration'] }}</p>
+            </div>
+
+            <form method="POST" action="{{ url_for('confirm_booking', movie_id=movie['id']) }}">
+                <label for="name">Your Name:</label>
+                <input type="text" name="name" id="name" required>
+
+                <label for="phone">Phone Number:</label>
+                <input type="tel" name="phone" id="phone" pattern="[0-9]{10}" required>
+
+                <label for="showtime">Show Time:</label>
+                <select name="showtime" id="showtime" required>
+                    <option value="10:00 AM">11:00 AM</option>
+                    <option value="1:00 PM">2:00 PM</option>
+                    <option value="4:00 PM">6:00 PM</option>
+                    <option value="7:00 PM">9:00 PM</option>
+                </select>
+
+                <label for="category">Ticket Category:</label>
+                <select name="category" id="category" required>
+                    <option value="upper">Upper (₹100)</option>
+                    <option value="lower">Lower (₹80)</option>
+                </select>
+
+                <label for="count">Number of Tickets:</label>
+                <input type="number" name="count" id="count" min="1" required>
+
+                <button type="submit">🎟️ Confirm Booking</button>
+            </form>
+        </div>
+    </div>
+
+</body>
+</html>

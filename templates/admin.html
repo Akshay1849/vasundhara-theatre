@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Dashboard - Movies</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        body { padding: 20px; background-color: #f9f9f9; }
+        table { width: 100%; border-collapse: collapse; background: white; margin-top: 20px; }
+        th, td { padding: 10px; border: 1px solid #ddd; text-align: center; }
+        th { background: #333; color: white; }
+        a.btn { padding: 6px 12px; text-decoration: none; border-radius: 5px; }
+        .edit { background: #007bff; color: white; }
+        .delete { background: red; color: white; }
+        .add-btn { background: green; color: white; padding: 8px 12px; border-radius: 5px; text-decoration: none; }
+    </style>
+</head>
+<body>
+    <h2>🎞️ Manage Movies</h2>
+    <a class="add-btn" href="/admin/add_movie">➕ Add New Movie</a>
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Poster</th>
+            <th>Title</th>
+            <th>Language</th>
+            <th>Cast</th>
+            <th>Duration</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+        {% for movie in movies %}
+        <tr>
+            <td>{{ movie['id'] }}</td>
+            <td><img src="{{ url_for('static', filename='images/' + movie['poster']) }}" width="60"></td>
+            <td>{{ movie['title'] }}</td>
+            <td>{{ movie['language'] }}</td>
+            <td>{{ movie['cast'] }}</td>
+            <td>{{ movie['duration'] }}</td>
+            <td>{{ movie['status'] }}</td>
+            <td>
+                <a class="btn edit" href="/admin/edit_movie/{{ movie['id'] }}">Edit</a>
+                <a class="btn delete" href="/admin/delete_movie/{{ movie['id'] }}" onclick="return confirm('Are you sure?')">Delete</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>

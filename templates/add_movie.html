@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add New Movie</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        .form-box {
+            max-width: 500px;
+            margin: auto;
+            background: white;
+            padding: 25px;
+            margin-top: 50px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        input, select, textarea {
+            width: 100%;
+            margin: 10px 0;
+            padding: 10px;
+            font-size: 15px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background: green;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        h2 {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-box">
+        <h2>➕ Add New Movie</h2>
+        <form method="POST">
+            <label>Movie Title:</label>
+            <input type="text" name="title" required>
+
+            <label>Poster Filename (e.g. pushpa2.jpg):</label>
+            <input type="text" name="poster" required>
+
+            <label>Language:</label>
+            <input type="text" name="language" required>
+
+            <label>Cast:</label>
+            <input type="text" name="cast" required>
+
+            <label>Duration:</label>
+            <input type="text" name="duration" required>
+
+            <label>Status:</label>
+            <select name="status" required>
+                <option value="running">Running</option>
+                <option value="upcoming">Upcoming</option>
+            </select>
+
+            <button type="submit">Add Movie</button>
+        </form>
+    </div>
+</body>
+</html>
