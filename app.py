@@ -1,7 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, session
 import sqlite3
-from datetime import datetime  # ✅ to track booking time
-import os
+from datetime import datetime
 
 # Flask App Initialization
 app = Flask(__name__)
@@ -45,20 +44,43 @@ def confirm_booking(movie_id):
     name = request.form['name']
     phone = request.form['phone']
     showtime = request.form['showtime']
-    category = request.form['category']
     count = int(request.form['count'])
+    seats = request.form['seats']
+    seat_list = seats.split(',')
 
-    price_per_ticket = 100 if category == 'upper' else 80
-    total_price = price_per_ticket * count
+    # Calculate total price based on seat prefix (U- or L-)
+    total_price = 0
+    upper_count = 0
+    lower_count = 0
+    for seat in seat_list:
+        if seat.startswith('U-'):
+            total_price += 100
+            upper_count += 1
+        elif seat.startswith('L-'):
+            total_price += 80
+            lower_count += 1
+
     booking_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
     conn = get_db_connection()
     movie = conn.execute('SELECT * FROM movies WHERE id=?', (movie_id,)).fetchone()
 
     conn.execute('''
-        INSERT INTO bookings (movie_id, movie_title, name, phone, showtime, category, count, total_price, booking_time)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-    ''', (movie['id'], movie['title'], name, phone, showtime, category, count, total_price, booking_time))
+        INSERT INTO bookings (movie_id, movie_title, name, phone, showtime, category, count, total_price, seats, booking_time)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    ''', (
+        movie['id'],
+        movie['title'],
+        name,
+        phone,
+        showtime,
+        'Mixed',  # Now it's mixed, so we use a label like "Mixed"
+        count,
+        total_price,
+        seats,
+        booking_time
+    ))
+
     conn.commit()
     conn.close()
 
@@ -67,10 +89,13 @@ def confirm_booking(movie_id):
                            name=name,
                            phone=phone,
                            showtime=showtime,
-                           category=category,
+                           category='Mixed',
                            count=count,
+                           upper_count=upper_count,
+                           lower_count=lower_count,
                            total_price=total_price,
-                           booking_time=booking_time)
+                           booking_time=booking_time,
+                           seats=seats)
 
 # --------------------
 # LOGIN

@@ -12,6 +12,7 @@
             border-radius: 10px;
             text-align: center;
             box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            color: #333;
         }
 
         h2 {
@@ -25,6 +26,18 @@
             padding: 8px 16px;
             text-decoration: none;
             border-radius: 5px;
+            display: inline-block;
+        }
+
+        .box p {
+            font-size: 18px;
+            margin: 10px 0;
+        }
+
+        .price-breakdown {
+            margin-top: 20px;
+            padding-top: 10px;
+            border-top: 1px solid #ccc;
         }
     </style>
 </head>
@@ -33,9 +46,16 @@
         <h2>🎉 Booking Confirmed!</h2>
         <p><strong>Movie:</strong> {{ movie['title'] }}</p>
         <p><strong>Showtime:</strong> {{ showtime }}</p>
-        <p><strong>Category:</strong> {{ category.title() }} Balcony</p>
-        <p><strong>Tickets:</strong> {{ count }}</p>
+        <p><strong>Tickets Booked:</strong> {{ count }}</p>
+        <p><strong>Selected Seats:</strong> {{ seats }}</p>
+
+        <div class="price-breakdown">
+            <p><strong>Upper Balcony:</strong> {{ upper_count }} x ₹100 = ₹{{ upper_count * 100 }}</p>
+            <p><strong>Lower Balcony:</strong> {{ lower_count }} x ₹80 = ₹{{ lower_count * 80 }}</p>
+        </div>
+
         <p><strong>Total Price:</strong> ₹{{ total_price }}</p>
+        <p><strong>Booked At:</strong> {{ booking_time }}</p>
 
         <a href="/" class="btn-home">🏠 Go to Home</a>
     </div>

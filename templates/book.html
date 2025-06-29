@@ -13,7 +13,7 @@
         }
 
         .container {
-            max-width: 900px;
+            max-width: 1000px;
             margin: 40px auto;
             background: #ffffff15;
             padding: 40px;
@@ -21,6 +21,7 @@
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
             display: flex;
             gap: 40px;
+            flex-wrap: wrap;
         }
 
         .poster {
@@ -35,12 +36,6 @@
 
         .booking-form {
             flex: 2;
-        }
-
-        .booking-form h2 {
-            font-size: 28px;
-            margin-bottom: 20px;
-            color: #00ffd0;
         }
 
         label {
@@ -70,69 +65,160 @@
             border: none;
             border-radius: 10px;
             cursor: pointer;
-            transition: 0.3s ease;
         }
 
-        button:hover {
-            background: #c0392b;
+        .seats-container {
+            margin-top: 20px;
         }
 
-        .movie-details {
-            margin-bottom: 15px;
+        .seat-row {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 6px;
         }
 
-        .movie-details p {
-            margin: 5px 0;
-            color: #ccc;
+        .seat {
+            width: 40px;
+            height: 40px;
+            margin: 2px;
+            text-align: center;
+            line-height: 40px;
+            border-radius: 6px;
+            background: #3498db;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .seat.selected {
+            background: #2ecc71;
+        }
+
+        .seat.occupied {
+            background: #7f8c8d;
+            cursor: not-allowed;
+        }
+
+        .seat.aisle {
+            background: transparent;
+            border: none;
+            cursor: default;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin: 20px 0 10px;
+            color: #ffd700;
         }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <!-- Poster Section -->
-        <div class="poster">
-            <img src="{{ url_for('static', filename='images/' + movie['poster']) }}" alt="{{ movie['title'] }} Poster">
-        </div>
+<div class="container">
+    <div class="poster">
+        <img src="{{ url_for('static', filename='images/' + movie['poster']) }}" alt="{{ movie['title'] }} Poster">
+    </div>
 
-        <!-- Booking Form Section -->
-        <div class="booking-form">
-            <h2>Book Tickets for {{ movie['title'] }}</h2>
+    <div class="booking-form">
+        <h2>Book Tickets for {{ movie['title'] }}</h2>
+        <form method="POST" action="{{ url_for('confirm_booking', movie_id=movie['id']) }}" onsubmit="return collectSeats()">
 
-            <div class="movie-details">
-                <p><strong>🎤 Cast:</strong> {{ movie['cast'] }}</p>
-                <p><strong>🗣️ Language:</strong> {{ movie['language'] }}</p>
-                <p><strong>⏱️ Duration:</strong> {{ movie['duration'] }}</p>
+            <label for="name">Your Name:</label>
+            <input type="text" name="name" required>
+
+            <label for="phone">Phone Number:</label>
+            <input type="tel" name="phone" pattern="[0-9]{10}" required>
+
+            <label for="showtime">Show Time:</label>
+            <select name="showtime" required>
+                <option value="11:00 AM">11:00 AM</option>
+                <option value="2:00 PM">2:00 PM</option>
+                <option value="6:00 PM">6:00 PM</option>
+                <option value="9:00 PM">9:00 PM</option>
+            </select>
+
+            <label for="count">Number of Tickets:</label>
+            <input type="number" name="count" id="count" min="1" required>
+
+            <div class="seats-container">
+                <label>Select Your Seats:</label>
+
+                <div class="section-title">Upper Balcony (₹100)</div>
+                <div id="upperSeats"></div>
+
+                <div class="section-title">Lower Balcony (₹80)</div>
+                <div id="lowerSeats"></div>
             </div>
 
-            <form method="POST" action="{{ url_for('confirm_booking', movie_id=movie['id']) }}">
-                <label for="name">Your Name:</label>
-                <input type="text" name="name" id="name" required>
+            <input type="hidden" name="seats" id="seatsInput">
 
-                <label for="phone">Phone Number:</label>
-                <input type="tel" name="phone" id="phone" pattern="[0-9]{10}" required>
-
-                <label for="showtime">Show Time:</label>
-                <select name="showtime" id="showtime" required>
-                    <option value="10:00 AM">11:00 AM</option>
-                    <option value="1:00 PM">2:00 PM</option>
-                    <option value="4:00 PM">6:00 PM</option>
-                    <option value="7:00 PM">9:00 PM</option>
-                </select>
-
-                <label for="category">Ticket Category:</label>
-                <select name="category" id="category" required>
-                    <option value="upper">Upper (₹100)</option>
-                    <option value="lower">Lower (₹80)</option>
-                </select>
-
-                <label for="count">Number of Tickets:</label>
-                <input type="number" name="count" id="count" min="1" required>
-
-                <button type="submit">🎟️ Confirm Booking</button>
-            </form>
-        </div>
+            <button type="submit">🎟️ Confirm Booking</button>
+        </form>
     </div>
+</div>
+
+<script>
+    const upperSeatsLayout = [
+        ["A1", "A2", "A3", "A4", "A5", "A6", null, null, null, null, "A7", "A8", "A9", "A10", "A11", "A12", "A13", "A14", "A15", "A16"],
+        ["B1", "B2", "B3", "B4", "B5", "B6", "B7", "B8", "B9", null, null, null, null, "B10", "B11", "B12", "B13", "B14", "B15", "B16"],
+        ["C1", "C2", "C3", "C4", "C5", "C6", "C7", "C8", "C9", null, null, "C10", "C11", "C12", "C13", "C14", "C15", "C16", "C17", "C18"]
+    ];
+
+    const lowerSeatsLayout = [
+        ["A1", "A2", "A3", "A4", "A5", "A6", null, null, null, null, "A7", "A8", "A9", "A10", "A11", "A12", "A13", "A14", "A15", "A16"],
+        ["B1", "B2", "B3", "B4", "B5", "B6", null, null, null, null, "B7", "B8", "B9", "B10", "B11", "B12", "B13", "B14", "B15", "B16"],
+        ["C1", "C2", "C3", "C4", "C5", "C6", "C7", "C8", "C9", null, null, "C10", "C11", "C12", "C13", "C14", "C15", "C16", "C17", "C18"]
+    ];
+
+    let selectedSeats = [];
+
+    function renderSeats(layout, containerId, prefix) {
+        const seatGrid = document.getElementById(containerId);
+        seatGrid.innerHTML = "";
+        layout.forEach(row => {
+            const rowDiv = document.createElement("div");
+            rowDiv.classList.add("seat-row");
+            row.forEach(seat => {
+                const div = document.createElement("div");
+                if (seat === null) {
+                    div.classList.add("seat", "aisle");
+                } else {
+                    const seatLabel = prefix + "-" + seat; // U-A1 or L-B2
+                    div.classList.add("seat");
+                    div.innerText = seat;
+                    div.addEventListener("click", () => toggleSeat(div, seatLabel));
+                }
+                rowDiv.appendChild(div);
+            });
+            seatGrid.appendChild(rowDiv);
+        });
+    }
+
+    function toggleSeat(div, seatLabel) {
+        if (div.classList.contains("selected")) {
+            div.classList.remove("selected");
+            selectedSeats = selectedSeats.filter(s => s !== seatLabel);
+        } else {
+            div.classList.add("selected");
+            selectedSeats.push(seatLabel);
+        }
+    }
+
+    function collectSeats() {
+        const count = parseInt(document.getElementById("count").value);
+        if (selectedSeats.length !== count) {
+            alert(`Please select exactly ${count} seat(s).`);
+            return false;
+        }
+        document.getElementById("seatsInput").value = selectedSeats.join(",");
+        return true;
+    }
+
+    window.onload = () => {
+        renderSeats(upperSeatsLayout, "upperSeats", "U");
+        renderSeats(lowerSeatsLayout, "lowerSeats", "L");
+    }
+</script>
 
 </body>
 </html>

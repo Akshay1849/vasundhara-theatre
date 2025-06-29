@@ -30,6 +30,7 @@
         .navbar h2 {
             margin: 0;
             color: white;
+            font-size: 24px;
         }
 
         .navbar a {
@@ -40,6 +41,7 @@
             text-decoration: none;
             font-weight: bold;
             margin-left: 10px;
+            font-size: 14px;
         }
 
         .welcome {
@@ -48,12 +50,12 @@
         }
 
         .welcome h1, .welcome h2 {
-            font-size: 36px;
+            font-size: 32px;
             margin-bottom: 10px;
         }
 
         .welcome p {
-            font-size: 18px;
+            font-size: 16px;
             color: #f1f1f1;
         }
 
@@ -62,7 +64,7 @@
             flex-wrap: wrap;
             justify-content: center;
             gap: 25px;
-            padding: 40px;
+            padding: 40px 20px;
         }
 
         .movie-card {
@@ -88,6 +90,7 @@
 
         .movie-card h3 {
             margin: 10px 0 5px;
+            font-size: 18px;
         }
 
         .movie-card p {
@@ -137,13 +140,13 @@
         }
 
         .about-section h2 {
-            font-size: 32px;
+            font-size: 28px;
             margin-bottom: 15px;
             color: #ffd700;
         }
 
         .about-section p {
-            font-size: 18px;
+            font-size: 16px;
             color: #f1f1f1;
             max-width: 900px;
             margin: 0 auto;
@@ -172,6 +175,45 @@
         .back-to-top:hover {
             background: #c0392b;
         }
+
+        /* ✅ MOBILE RESPONSIVENESS */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .navbar h2 {
+                font-size: 20px;
+                margin-bottom: 10px;
+            }
+
+            .navbar a {
+                margin: 5px 5px 5px 0;
+                font-size: 13px;
+            }
+
+            .movie-card {
+                width: 100%;
+            }
+
+            .movie-card img {
+                height: auto;
+            }
+
+            .welcome h1, .welcome h2 {
+                font-size: 26px;
+            }
+
+            .about-section p {
+                font-size: 15px;
+            }
+
+            .map-button a {
+                font-size: 16px;
+                padding: 10px 18px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -187,17 +229,17 @@
         </div>
     </div>
 
-    <!-- Welcome Message -->
+    <!-- Welcome -->
     <div class="welcome">
         <h1>🎉 Welcome to Vasundhara Theatre</h1>
         <p>Enjoy the latest blockbuster movies in comfort and style 🍿</p>
     </div>
 
-    <!-- About Us -->
+    <!-- About -->
     <div class="about-section" id="about">
         <h2>📜 About Us</h2>
         <p>
-            Vasundhara Theatre, Bhongir’s oldest and most cherished cinema hall, was inaugurated by superstar Nagarjuna in 1994 with the movie *Brothers*. Located opposite the Old Police Station, Vasundhara Theatre has served generations of movie lovers with unforgettable cinematic experiences. Known for its commitment to entertainment and customer satisfaction, it continues to be the heart of Bhongir’s film culture.
+            Vasundhara Theatre, Bhongir’s oldest and most cherished cinema hall, was inaugurated by superstar Nagarjuna in 1994 with the movie <em>Brothers</em>. Located opposite the Old Police Station, Vasundhara Theatre has served generations of movie lovers with unforgettable cinematic experiences. Known for its commitment to entertainment and customer satisfaction, it continues to be the heart of Bhongir’s film culture.
         </p>
     </div>
 
@@ -241,7 +283,7 @@
         {% endfor %}
     </div>
 
-    <!-- Get Directions -->
+    <!-- Directions -->
     <div class="map-button">
         <h3>📍 Want to visit us?</h3>
         <a href="https://maps.app.goo.gl/VHfcNDtw1t96ZMEXA" target="_blank">🚗 Get Directions</a>
